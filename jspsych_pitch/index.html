@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Sound Pleasantness, Consonance, and Groove Test</title>
+  <title>Sound Pleasantness and Consonance Test</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
 
@@ -259,44 +259,6 @@
       box-shadow: 0 5px 18px rgba(108,99,255,.45);
     }
 
-
-    .groove-word-scale {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
-      font-size: .72rem;
-      font-weight: 800;
-      color: var(--accent1);
-      margin-bottom: 8px;
-      padding: 0 2px;
-      line-height: 1.15;
-    }
-    .groove-word-scale span { flex: 1; text-align: center; }
-
-    /* groove slider: neutral gradient + movement thumb */
-    input[type=range].groove-slider {
-      background: linear-gradient(to right, #e2e8f0, #cbd5e1, #94a3b8, #cbd5e1, #e2e8f0);
-    }
-    input[type=range].groove-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: #fff;
-      border: 3px solid var(--accent1);
-      box-shadow: 0 3px 12px rgba(108,99,255,.3);
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><text y="52%" x="50%" dominant-baseline="middle" text-anchor="middle" font-size="38">🕺</text></svg>');
-      background-size: 65%;
-      background-repeat: no-repeat;
-      background-position: center;
-      cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
-    }
-    input[type=range].groove-slider:not(:disabled)::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-      box-shadow: 0 5px 18px rgba(108,99,255,.45);
-    }
-
     .slider-value-label {
       font-size: .85rem;
       font-weight: 700;
@@ -497,7 +459,7 @@ const jsPsych = initJsPsych({
   on_finish: () => {
     const sid = jsPsych.data.get().first(1).values()[0].participant_id || 'UNKNOWN';
     const dateStr = new Date().toISOString().split('T')[0];
-    const filename = `pleasantness_consonance_groove_${sid}_${dateStr}.csv`;
+    const filename = `pleasantness_consonance_${sid}_${dateStr}.csv`;
     jsPsych.data.get().localSave('csv', filename);
   }
 });
@@ -518,7 +480,7 @@ const startScreen = {
       <div class="info-card">
         <div class="ic-icon">🥁</div>
         <div class="ic-title">Part 2 — Rhythms</div>
-        <div class="ic-body">You will hear different rhythmic patterns and rate their groove.</div>
+        <div class="ic-body">You will hear different rhythmic patterns.</div>
       </div>
       <div class="info-card">
         <div class="ic-icon">🎚️</div>
@@ -636,8 +598,7 @@ const practice_screen = {
       </div>
       <div class="step-row">
         <div class="step-num">2</div>
-        <div class="step-text">🧩 <b>Consonance slider in Part 1:</b> Did the notes fit well together, or did they clash? This slider uses <b>numbers (1–7)</b> with a puzzle piece handle.
-          <br><br>🕺 <b>Groove slider in Part 2:</b> How much did this rhythm make you want to move?. This slider uses a <b>7-point scale</b> with a movement handle.
+        <div class="step-text">🧩 <b>Consonance slider:</b> Did the notes fit well together, or did they clash? This slider uses <b>numbers (1–7)</b> with a puzzle piece handle.
           <br><br>🎵 <b>Pleasantness slider:</b> How enjoyable was the sound to listen to? This slider uses <b>emoji faces</b> with a music note handle.</div>
       </div>
       <div class="step-row">
@@ -665,7 +626,6 @@ const practice_screen = {
     <audio id="ex-dissonant" src="${example_dissonant}"></audio>
 
     <p style="font-weight:800;color:var(--accent1);margin-bottom:14px;">👇 Try the sliders now!</p>
-    <p style="font-size:.9rem;color:var(--muted);margin-bottom:10px;">In Part 2, this first rating scale will ask about <b>groove</b>, meaning how much the rhythm makes you want to move.</p>
 
     <div class="demo-slider-wrap">
       <div class="slider-question">🧩 How consonant did this sound feel?</div>
@@ -815,7 +775,7 @@ function makePitchTrial(stimPath, trialIdx, total) {
   };
 }
 
-/* ── Rhythm Trial (groove + pleasantness) ── */
+/* ── Rhythm Trial (consonance + pleasantness) ── */
 function makeRhythmTrial(stimPath, trialIdx, total) {
   const pct = Math.round((trialIdx / total) * 100);
 
@@ -837,12 +797,12 @@ function makeRhythmTrial(stimPath, trialIdx, total) {
       </div>
 
       <div class="slider-block">
-        <div class="slider-question">🕺 How much groove did this rhythm have?<br><small style="font-weight:600;color:var(--muted)">How much did this rhythm make you want to move?</small></div>
-        <div class="scale-endpoints"><span>I did not want to move at all</span><span>I wanted to move very much</span></div>
-        <div class="groove-word-scale">
-          <span>Not at all</span><span>Very little</span><span>A little</span><span>Moderately</span><span>Quite a bit</span><span>Very much</span><span>Extremely</span>
+        <div class="slider-question">🧩 How <b>consonant</b> was this rhythm?<br><small style="font-weight:600;color:var(--muted)">Did the rhythmic pattern sound consonant?</small></div>
+        <div class="scale-endpoints"><span>Highly dissonant</span><span>Highly consonant</span></div>
+        <div class="number-scale">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
         </div>
-        <input id="slider_groove" class="groove-slider" type="range" min="0" max="6" step="0.01" value="3" disabled>
+        <input id="slider_consonance" class="consonance-slider" type="range" min="0" max="6" step="0.01" value="3" disabled>
         <div id="val1" class="slider-value-label">— slider not active yet —</div>
       </div>
 
@@ -859,16 +819,16 @@ function makeRhythmTrial(stimPath, trialIdx, total) {
     on_load: () => {
       const btn    = document.querySelector('.jspsych-btn');
       const audio  = document.getElementById('stim');
-      const s1     = document.getElementById('slider_groove');
+      const s1     = document.getElementById('slider_consonance');
       const s2     = document.getElementById('slider_pleasant');
       const status = document.getElementById('audio-status');
       const stxt   = document.getElementById('status-text');
       const v1     = document.getElementById('val1');
       const v2     = document.getElementById('val2');
 
-      const grooveLabels = ['Not at all','Very little','A little','Moderately','Quite a bit','Very much','Extremely'];
-      const emojis       = ['😡','😠','😕','😐','🙂','😄','🤩'];
-      const pleasLabels  = ['Not pleasant at all','Not pleasant','Slightly unpleasant','Neutral','Slightly pleasant','Pleasant','Very pleasant!'];
+      const consLabels  = ['Highly dissonant','Dissonant','Slightly dissonant','Neutral','Slightly consonant','Consonant','Highly consonant'];
+      const emojis      = ['😡','😠','😕','😐','🙂','😄','🤩'];
+      const pleasLabels = ['Not pleasant at all','Not pleasant','Slightly unpleasant','Neutral','Slightly pleasant','Pleasant','Very pleasant!'];
 
       btn.disabled = s1.disabled = s2.disabled = true;
 
@@ -888,7 +848,7 @@ function makeRhythmTrial(stimPath, trialIdx, total) {
 
       s1.addEventListener('input', () => {
         const idx = Math.min(6, Math.round(parseFloat(s1.value)));
-        v1.textContent = grooveLabels[idx];
+        v1.textContent = (idx+1) + ' — ' + consLabels[idx];
         checkBtn();
       });
       s2.addEventListener('input', () => {
@@ -903,7 +863,7 @@ function makeRhythmTrial(stimPath, trialIdx, total) {
 
       btn.addEventListener('click', () => {
         jsPsych.data.addDataToLastTrial({
-          groove:       s1.value,
+          consonance:   s1.value,
           pleasantness: s2.value,
           part:         'rhythm',
           stimulus:     stimPath
@@ -944,7 +904,7 @@ const intro_rhythm = {
   stimulus: card(`
     <div class="part-badge">🥁 Part 2</div>
     <div class="display">Rhythms</div>
-    <p class="lead">Now you will hear rhythmic patterns. Each rhythm plays <b>once</b> — the sliders will activate when it finishes. You will rate groove, meaning how much the pattern makes you want to move.</p>
+    <p class="lead">Now you will hear rhythmic patterns. Each rhythm plays <b>once</b> — the sliders will activate when it finishes.</p>
     <div class="info-grid" style="grid-template-columns:1fr 1fr">
       <div class="info-card">
         <div class="ic-icon">1️⃣</div>
@@ -954,7 +914,7 @@ const intro_rhythm = {
       <div class="info-card">
         <div class="ic-icon">🎚️</div>
         <div class="ic-title">2 sliders</div>
-        <div class="ic-body">Rate <b>groove</b> (🕺 7-point scale) and <b>pleasantness</b> (🎵 emojis).</div>
+        <div class="ic-body">Rate <b>consonance</b> (🧩 numbers) and <b>pleasantness</b> (🎵 emojis).</div>
       </div>
     </div>
   `),
@@ -1003,7 +963,7 @@ jsPsych.run([
       document.getElementById('abort-btn').style.display='none';
       const sid = jsPsych.data.get().first(1).values()[0].participant_id || 'UNKNOWN';
       const dateStr = new Date().toISOString().split('T')[0];
-      const filename = 'pleasantness_consonance_groove_' + sid + '_' + dateStr + '_partial.csv';
+      const filename = 'pleasantness_consonance_' + sid + '_' + dateStr + '_partial.csv';
       jsPsych.data.get().localSave('csv', filename);
       setTimeout(() => jsPsych.abortExperiment('Participant ended the test early.'), 400);
     }
